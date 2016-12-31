@@ -4,24 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/kidoman/embd"
-	_ "github.com/kidoman/embd/host/rpi"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
 )
 
-/********************************************rpi testing*******************************************************/
-
-/*****************************************************************************************************************/
-
 /**********************SQLITE TESTING ********************************************************************/
-
-func testEmbd() {
-	for {
-		embd.LEDToggle("LED0")
-	}
-}
 
 type TestItem struct {
 	Id    string
