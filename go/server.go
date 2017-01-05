@@ -7,6 +7,7 @@ import (
 	// _ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
+	"bytes"
 )
 
 /**********************SQLITE TESTING ********************************************************************/
@@ -109,10 +110,6 @@ func DatabaseHandler(w http.ResponseWriter, request *http.Request) {
 
 }
 
-func HomeHandler(w http.ResponseWriter, request *http.Request) {
-	http.ServeFile(w, request, "../index.html")
-}
-
 func LightHandler(w http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	id := vars["id"]
@@ -126,11 +123,20 @@ func PumpHandler(w http.ResponseWriter, request *http.Request) {
 }
 
 func CalendarHandler(w http.ResponseWriter, request *http.Request) {
-	http.ServeFile(w, request, "../fullcalendar.html")	
+	http.ServeFile(w, request, "../calendar.html")	
 }
 
 func PlantViewHandler(w http.ResponseWriter, request *http.Request) {
 	http.ServeFile(w, request, "../plants.html")
+}
+
+func AddEventHandler(w http.ResponseWriter, request *http.Request) {
+	fmt.Println("Add Event Handler hit ")
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(request)
+	string := ReadRequest(buf)
+	fmt.Println(string)
+
 }
 
 func Serve() {
@@ -138,11 +144,11 @@ func Serve() {
 	var port = "8080"
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/calendar", CalendarHandler)
 	r.HandleFunc("/plants", PlantViewHandler)
 	r.HandleFunc("/light/{id}", LightHandler)
 	r.HandleFunc("/pump/{id}", PumpHandler)
+	r.HandleFunc("/addevent", AddEventHandler)
 	http.Handle("/public/", http.StripPrefix("/public", http.FileServer(http.Dir("../public"))))
 	http.Handle("/", r)
 	log.Printf("goLang server listening on %s:%s\n", host, port)
