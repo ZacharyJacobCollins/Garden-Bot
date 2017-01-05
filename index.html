@@ -4,18 +4,100 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Zachary Collins">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Sticky Footer Navbar Template for Bootstrap</title>
+    <title>Garden Bot</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="sticky-footer-navbar.css" rel="stylesheet">
+    <link href="/public/css/sticky-footer-navbar.css" rel="stylesheet">
+
+    <!-- Full Calendar  -->
+  <link href='/public/css/fullcalendar.min.css' rel='stylesheet' />
+<link href='/public/css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<script src='/public/js/moment.min.js'></script>
+<script src='/public/js/jquery.min.js'></script>
+<script src='/public/js/fullcalendar.min.js'></script>
+
+    <script>
+
+      $(document).ready(function() {
+        
+        $('#calendar').fullCalendar({
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,basicWeek,basicDay'
+          },
+          defaultDate: '2016-12-12',
+          navLinks: true, // can click day/week names to navigate views
+          editable: true,
+          eventLimit: true, // allow "more" link when too many events
+          events: [
+            {
+              title: 'All Day Event',
+              start: '2016-12-01'
+            },
+            {
+              title: 'Long Event',
+              start: '2016-12-07',
+              end: '2016-12-10'
+            },
+            {
+              id: 999,
+              title: 'Repeating Event',
+              start: '2016-12-09T16:00:00'
+            },
+            {
+              id: 999,
+              title: 'Repeating Event',
+              start: '2016-12-16T16:00:00'
+            },
+            {
+              title: 'Conference',
+              start: '2016-12-11',
+              end: '2016-12-13'
+            },
+            {
+              title: 'Meeting',
+              start: '2016-12-12T10:30:00',
+              end: '2016-12-12T12:30:00'
+            },
+            {
+              title: 'Lunch',
+              start: '2016-12-12T12:00:00'
+            },
+            {
+              title: 'Meeting',
+              start: '2016-12-12T14:30:00'
+            },
+            {
+              title: 'Happy Hour',
+              start: '2016-12-12T17:30:00'
+            },
+            {
+              title: 'Dinner',
+              start: '2016-12-12T20:00:00'
+            },
+            {
+              title: 'Birthday Party',
+              start: '2016-12-13T07:00:00'
+            },
+            {
+              title: 'Click for Google',
+              url: 'http://google.com/',
+              start: '2016-12-28'
+            }
+          ]
+        });
+        
+      });
+    </script>
+
   </head>
 
   <body>
@@ -54,11 +136,7 @@
 
     <!-- Begin page content -->
     <div class="container">
-      <div class="mt-1">
-        <h1>Sticky footer with fixed navbar</h1>
-      </div>
-      <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
-      <p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>
+      <div id='calendar'></div>
     </div>
 
     <footer class="footer">
@@ -74,6 +152,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-    <script src="./js/bootstrap.min.js"></script>
+    <script src="/public/js/bootstrap.min.js"></script>
   </body>
 </html>
