@@ -1,8 +1,8 @@
 package main
 
 import (
-	// "database/sql"
-	// _ "github.com/mattn/go-sqlite3"
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
 	"fmt"
 	"github.com/gorilla/mux"
 	"log"
@@ -11,97 +11,90 @@ import (
 )
 
 /**********************SQLITE TESTING ********************************************************************/
+var db = InitDB("./sqlite.db")
 
-// type TestItem struct {
-// 	Id    string
-// 	Name  string
-// 	Phone string
-// }
 
-// //Open the db object
-// func InitDB(filepath string) *sql.DB {
-// 	db, err := sql.Open("sqlite3", filepath)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	if db == nil {
-// 		panic("db nil")
-// 	}
-// 	return db
-// }
+//Open the db object
+func InitDB(filepath string) *sql.DB {
+	db, err := sql.Open("sqlite3", filepath)
+	if err != nil {
+		panic(err)
+	}
+	if db == nil {
+		panic("db nil")
+	}
+	return db
+}
 
-// func CreateTable(db *sql.DB) {
-// 	// create table if not exists
-// 	sql_table := `
-// 	CREATE TABLE IF NOT EXISTS items(
-// 		Id TEXT NOT NULL PRIMARY KEY,
-// 		Name TEXT,
-// 		Phone TEXT,
-// 		InsertedDatetime DATETIME
-// 	);
-// 	`
+func CreateTable() {
+	// create table if not exists
+	sql_table := `
+	CREATE TABLE IF NOT EXISTS events(
+		Id TEXT NOT NULL PRIMARY KEY,
+		Type TEXT,
+		InsertedDatetime DATETIME
+	);
+	`
 
-// 	_, err := db.Exec(sql_table)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// }
+	_, err := db.Exec(sql_table)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// func StoreItems(db *sql.DB, items []TestItem) {
-// 	sql_additem := `
-// 	INSERT OR REPLACE INTO items(
-// 		Id,
-// 		Name,
-// 		Phone,
-// 		InsertedDatetime
-// 	) values(?, ?, ?, CURRENT_TIMESTAMP)
-// 	`
+func StoreEvents(events []Event) {
+	sql_addevent := `
+	INSERT OR REPLACE INTO events(
+		Id,
+		Type,
+		InsertedDatetime
+	) values(?, ?, CURRENT_TIMESTAMP)
+	`
 
-// 	stmt, err := db.Prepare(sql_additem)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	defer stmt.Close()
+	stmt, err := db.Prepare(sql_addevent)
+	if err != nil {
+		panic(err)
+	}
+	defer stmt.Close()
 
-// 	for _, item := range items {
-// 		_, err2 := stmt.Exec(item.Id, item.Name, item.Phone)
-// 		if err2 != nil {
-// 			panic(err2)
-// 		}
-// 	}
-// }
+	for _, event := range events {
+		_, err2 := stmt.Exec(event.Id, event.Type)
+		if err2 != nil {
+			panic(err2)
+		}
+	}
+}
 
-// func ReadItem(db *sql.DB) []TestItem {
-// 	sql_readall := `
-// 	SELECT Id, Name, Phone FROM items
-// 	ORDER BY datetime(InsertedDatetime) DESC
-// 	`
+func ReadEvents() []Event{
+	sql_readall := `
+	SELECT Id, Type FROM events
+	ORDER BY datetime(InsertedDatetime) DESC
+	`
 
-// 	rows, err := db.Query(sql_readall)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	defer rows.Close()
+	rows, err := db.Query(sql_readall)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
 
-// 	var result []TestItem
-// 	for rows.Next() {
-// 		item := TestItem{}
-// 		err2 := rows.Scan(&item.Id, &item.Name, &item.Phone)
-// 		if err2 != nil {
-// 			panic(err2)
-// 		}
-// 		result = append(result, item)
-// 	}
-// 	return result
-// }
+	var result []Event
+	for rows.Next() {
+		event := Event{}
+		err2 := rows.Scan(&event.Id, &event.Type)
+		if err2 != nil {
+			panic(err2)
+		}
+		result = append(result, event)
+	}
+	return result
+}
 
-// func Database() {
-// 	db := InitDB("./sqlite.db")
-// 	CreateTable(db)
-// 	var items = []TestItem{{"id", "Name", "8675309"}}
-// 	StoreItems(db, items)
-// 	fmt.Print(ReadItem(db))
-// }
+func initDatabase() {
+	CreateTable()
+	var events = []Event{{"id", "light"}}
+	StoreEvents(events)
+	fmt.Print(ReadEvents())
+}
 
 /**********************SQLITE TESTING ********************************************************************/
 
@@ -140,12 +133,19 @@ func AddEventHandler(w http.ResponseWriter, req *http.Request) {
         panic(err)
     }
     defer req.Body.Close()
-    log.Println(e.Type)
+    log.Println(e)
+    var events = []Event{e}
+    StoreEvents(events)
+}
+
+func ReadAllEventsHandler(w http.ResponseWriter, req *http.Request) {
+	fmt.Println(ReadEvents())
 }
 
 func Serve() {
+	initDatabase()
 	var host = "localhost"
-	var port = "8080"
+	var port = "8000"
 
 	r := mux.NewRouter()
 	r.HandleFunc("/calendar", CalendarHandler)
@@ -153,6 +153,7 @@ func Serve() {
 	r.HandleFunc("/light/{id}", LightHandler)
 	r.HandleFunc("/pump/{id}", PumpHandler)
 	r.HandleFunc("/addevent", AddEventHandler)
+	r.HandleFunc("/read", ReadAllEventsHandler)
 	http.Handle("/public/", http.StripPrefix("/public", http.FileServer(http.Dir("../public"))))
 	http.Handle("/", r)
 	log.Printf("goLang server listening on %s:%s\n", host, port)

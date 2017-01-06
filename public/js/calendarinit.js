@@ -9,6 +9,8 @@
 			$(this).data('event', {
 				title: $.trim($(this).text()), // use the element's text as the event title
 				stick: true, // maintain when user navigates (see docs on the renderEvent method)
+				start  : '2010-01-05',
+                end    : '2010-01-07'
 			});
 
 			// make the event draggable using jQuery UI
@@ -45,7 +47,7 @@
 			header: {
 				left: 'prev,next today',
 				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
+				right: 'month,agendaWeekthisthis,agendaDay'
 			},
 			editable: true,
 			droppable: true, // this allows things to be dropped onto the calendar
