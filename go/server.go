@@ -2,12 +2,12 @@ package main
 
 import (
 	// "database/sql"
+	// _ "github.com/mattn/go-sqlite3"
 	"fmt"
 	"github.com/gorilla/mux"
-	// _ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
-	"bytes"
+	"encoding/json"
 )
 
 /**********************SQLITE TESTING ********************************************************************/
@@ -105,6 +105,7 @@ import (
 
 /**********************SQLITE TESTING ********************************************************************/
 
+
 //Make into a struct
 func DatabaseHandler(w http.ResponseWriter, request *http.Request) {
 
@@ -130,13 +131,16 @@ func PlantViewHandler(w http.ResponseWriter, request *http.Request) {
 	http.ServeFile(w, request, "../plants.html")
 }
 
-func AddEventHandler(w http.ResponseWriter, request *http.Request) {
+func AddEventHandler(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("Add Event Handler hit ")
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(request)
-	string := ReadRequest(buf)
-	fmt.Println(string)
-
+	decoder := json.NewDecoder(req.Body)
+    var e Event
+    err := decoder.Decode(&e)
+    if err != nil {
+        panic(err)
+    }
+    defer req.Body.Close()
+    log.Println(e.Type)
 }
 
 func Serve() {

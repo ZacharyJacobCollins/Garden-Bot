@@ -49,12 +49,24 @@
 			},
 			editable: true,
 			droppable: true, // this allows things to be dropped onto the calendar
-			drop: function() {
-				// is the "remove after drop" checkbox checked?
-				if ($('#drop-remove').is(':checked')) {
-					// if so, remove the element from the "Draggable Events" list
-					$(this).remove();
-				}
-			}
+			drop: function () {
+				console.log(this.innerHTML)
+				console.log('adding event')
+				$.ajax({
+				    type: "POST",
+				    url: "/addevent",
+				    // The key needs to match your method's input parameter (case-sensitive).
+				    data: JSON.stringify({ Type: this.innerHTML, StartTime: "8am", EndTime: "9am"}),
+				    contentType: "application/json; charset=utf-8",
+				    dataType: "json",
+				    success: function(data){
+				    	console.log('hit')
+				    },
+				    failure: function(errMsg) {
+				    	console.log(err)
+				    	console.log(errMsg)
+				    }
+				});
+			},
 		});
 	});

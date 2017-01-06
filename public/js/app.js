@@ -13,17 +13,19 @@ var vm = new Vue({
 			    type: "POST",
 			    url: "/addevent",
 			    // The key needs to match your method's input parameter (case-sensitive).
-			    data: JSON.stringify({ Event: "[EVENT]" }),
+			    data: JSON.stringify({ Type: "light", StartTime: "8am", EndTime: "9am"}),
 			    contentType: "application/json; charset=utf-8",
 			    dataType: "json",
-			    success: function(data){alert(data);},
+			    success: function(data){
+			    	console.log('hit')
+			    },
 			    failure: function(errMsg) {
-			        alert(errMsg);
+			    	console.log(err)
+			    	console.log(errMsg)
 			    }
 			});
 		},
 	}
-		
 });
 
 

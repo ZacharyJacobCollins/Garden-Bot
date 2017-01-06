@@ -11,12 +11,13 @@
 		<link href='/public/css/fullcalendar.min.css' rel='stylesheet' />
 		<link href='/public/css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
 		<link href='/public/css/style.css' rel='stylesheet' media='print' />
+		<link href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css' />
 		
 
 	</head>
 
 	<body>
-		<div id="app">
+		<div id="app" class="container">
 		 	<!-- Fixed navbar -->
 		    <div class="pos-f-t">
 		      <div class="collapse" id="navbar-header">
@@ -43,31 +44,35 @@
 		      </nav>
 		    </div>
 
-		    <div class="container">
-				<div class="row">
-					<div id="external-events" class="col-sm-2">
-						One off events
-						<br />
-						<a href="#"><div class='fc-event'>Light</div></a>
-						<br />
-						<a href="#"><div class='fc-event'>Water</div></a>
-						<br />
-						<a href="#"><div class='fc-event'>Picture</div></a>
-						<br />
-						Recurring events
-						<br />
-						<a href="#"><div class='recurring-event'>Light</div></a>
-						<br />
-						<a href="#"><div class='recurring-event'>Water</div></a>
-						<br />
-						<a href="#"><div class='recurring-event'>Picture</div></a>
+			<div class="row">
 
-						<br />
-						<button @click="addEvent">button</button>
-					</div>
-					<div id='calendar' class="col-sm-10"></div>
+				<!-- Event Sidebar -->
+				<div id="external-events" class="col-sm-2">
+					One off events
+					<br />
+					<a href="#"><div class='fc-event'>Light</div></a>
+					<br />
+					<a href="#"><div class='fc-event'>Water</div></a>
+					<br />
+					<a href="#"><div class='fc-event'>Picture</div></a>
+					<br />
+					Recurring events
+					<br />
+					<a href="#"><div class='recurring-event'>Light</div></a>
+					<br />
+					<a href="#"><div class='recurring-event'>Water</div></a>
+					<br />
+					<a href="#"><div class='recurring-event'>Picture</div></a>
+
+					<br />
+					<button type="button" class="btn btn-success" @click="addEvent">Save</button>
 				</div>
+
+				<!-- Calendar Instantiation -->
+				<div id='calendar' class="col-sm-10"></div>
+
 			</div>
+
 		</div>
 
 	</body>
@@ -78,6 +83,9 @@
 	<script src='/public/js/jquery-ui.min.js'></script>
 	<script src='/public/js/fullcalendar.min.js'></script>
 	<script src='/public/js/calendarinit.js'></script>
+
+	<!-- Toastr -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js'></script>
 
 	<!-- Vue js -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.js"></script>
